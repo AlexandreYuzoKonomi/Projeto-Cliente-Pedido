@@ -1,0 +1,101 @@
+create database clienteapi;
+use clienteapi;
+create table categoria (
+id int(4) AUTO_INCREMENT,
+nome varchar(30) not null,
+primary key (id)
+);
+create table tab_produto(
+id int(4) auto_increment,
+nome varchar(50) not null,
+preco double,
+primary key (id)
+);
+
+insert into categoria (id,nome) values (null,"Informática");
+insert into categoria (id,nome) values (null,"Escritório");
+
+insert into tab_produto (id,nome,preco) values (null,"computador",2000.00);
+insert into tab_produto (id,nome,preco) values (null,"impressora",800.00);
+insert into tab_produto (id,nome,preco) values(null,"mouse",80.00);
+
+create table tab_estado(
+id int(4) auto_increment,
+nome varchar(50) not null,
+primary key(id)
+);
+
+create table tab_produto_categoria(
+produto_id int(4) not null,
+categoria_id int(4) not null,
+primary key (produto_id,categoria_id),
+key fk_produto_categoria_produto_id_categoria_id(produto_id , categoria_id),
+constraint fk_produto_categoria_categoria_id foreign key (categoria_id)
+references categoria (id),
+constraint fk_produto_categoria_produto_id foreign key (produto_id)
+references tab_produto (id)
+);
+
+insert into tab_produto_categoria(produto_id , categoria_id) values (1,1);
+insert into tab_produto_categoria(produto_id , categoria_id) values (2,1);
+insert into tab_produto_categoria(produto_id , categoria_id) values (3,1);
+
+create table tab_cidade(
+id int(4) auto_increment,
+nome varchar(50) not null,
+primary key(id)
+);
+
+insert into tab_estado (id,nome) values (null,"São Paulo");
+insert into tab_estado (id,nome) values (null,"Minas Gerais");
+
+insert into tab_cidade (id,nome) values (null,"São Paulo");
+insert into tab_cidade (id,nome) values (null,"Uberlândia");
+insert into tab_cidade (id,nome) values (null,"Campinas");
+
+create table tab_endereco(
+id int(4) auto_increment,
+logradouro varchar (50) not null,
+numero varchar (50) not null,
+complemento varchar (50) not null,
+bairro varchar (50) not null,
+cep varchar (50) not null,
+primary key(id),
+cidade_id varchar (50) not null,
+unique key uk_cidade(id)
+
+);
+
+insert into tab_endereco (id,logradouro,numero,complemento,bairro,cep,cidade_id) values (null,"Rua Flores","300","Apto 203","Jardim","38220834",1);
+insert into tab_endereco (id,logradouro,numero,complemento,bairro,cep,cidade_id) values (null,"Avenida Matos","105","Sala 800","Centro","36777012",2);
+insert into tab_endereco (id,logradouro,numero,complemento,bairro,cep,cidade_id) values (null,"Rua Teste","15","Sala 320","Teste","64874635",1);
+
+create table tab_cliente(
+id int(4) auto_increment,
+nome varchar (50) not null,
+email varchar (50) not null,
+documento varchar (100) not null,
+primary key (id),
+endereco_id varchar (100) not null,
+unique key uk_cliente_endereco(id)
+
+);
+
+insert into tab_cliente (id,nome,email,documento,endereco_id) values (null,"Maria","maria@gmail.com" ,"36378912377",3);
+insert into tab_cliente (id,nome,email,documento,endereco_id) values (null,"Joao","joao@gmail.com" ,"26389412311",2);
+insert into tab_cliente (id,nome,email,documento,endereco_id) values (null,"Jose","jose@gmail.com" ,"89614563511",1);
+
+create table tab_estado_cidade(
+estado_id int (4) not null,
+cidade_id int (4) not null,
+primary key (estado_id,cidade_id),
+key fk_estado_cidade_estado_id(estado_id),
+constraint fk_estado_cidade_estado_id foreign key (estado_id)
+references tab_estado(id),
+constraint fk_estado_cidade_cidade_id foreign key (cidade_id)
+references tab_cidade(id)
+);
+
+insert into tab_estado_cidade(estado_id , cidade_id) values (1,1);
+insert into tab_estado_cidade(estado_id , cidade_id) values (2,2);
+insert into tab_estado_cidade(estado_id , cidade_id) values (1,3);
